@@ -3,7 +3,7 @@ import { useState } from 'react'
 const INITIAL = [
   { t: 'Design MCP feature banner', done: true },
   { t: 'Review portfolio case study', done: true },
-  { t: 'Update CV for ZaloPay role', done: false },
+  { t: 'Update CV for Product Designer role', done: false },
   { t: 'Finish Next.js portfolio site', done: false },
   { t: 'Write GemPages changelog entry', done: false },
 ]
