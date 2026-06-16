@@ -13,8 +13,8 @@ import MessagesPanel from './panels/MessagesPanel'
 const DOCK_H = 96
 
 const CONFIGS = {
-  profile:  { title: 'Profile',   w: 300, h: 230 },
-  stats:    { title: 'Stats',     w: 300, h: 220 },
+  profile:  { title: 'Profile',   w: 300, h: 260 },
+  stats:    { title: 'Stats',     w: 300, h: 260 },
   tasks:    { title: 'Tasks',     w: 300, h: 260 },
   messages: { title: 'Messages',  w: 300, h: 270 },
 }
