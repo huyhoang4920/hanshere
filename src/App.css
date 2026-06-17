@@ -49,12 +49,6 @@
     gap: 8px;
     align-items: stretch;
   }
-  .dock-glow {
-    display: none;
-  }
-  .dock-zone {
-    display: none;
-  }
   .bg-dot--sep { display: none; }
   .bg-row {
     justify-content: space-between;
