@@ -49,9 +49,6 @@
     gap: 8px;
     align-items: stretch;
   }
-  .dock {
-    transition: none;
-  }
   .dock-glow {
     display: none;
   }
