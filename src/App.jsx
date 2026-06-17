@@ -86,12 +86,7 @@ export default function App() {
       return () => clearTimeout(t)
     }
   }, [activeId])
-  useEffect(() => {
-  const mq = window.matchMedia('(pointer: fine)')
-  if (!mq.matches && dockRef.current) {
-    dockRef.current.style.transform = 'translate(0px, 0px)'
-  }
-}, [])
+
   const glowRef = useRef(null)
   const dockRef = useRef(null)
 
