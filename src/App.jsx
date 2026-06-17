@@ -1,12 +1,12 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
-import { IconUser, IconGraphUp, IconCheck, IconMail, IconViewGrid } from './icons'
+import { IconUser, IconBriefcase, IconCheck, IconMail, IconViewGrid } from './icons'
 import './App.css'
 import Background from './Background'
 import Window from './Window'
 
-const DOCK_ICONS = { profile: IconUser, stats: IconGraphUp, tasks: IconCheck, messages: IconMail }
+const DOCK_ICONS = { profile: IconUser, projects: IconBriefcase, tasks: IconCheck, messages: IconMail }
 import ProfilePanel from './panels/ProfilePanel'
-import StatsPanel from './panels/StatsPanel'
+import ProjectsPanel from './panels/ProjectsPanel'
 import TasksPanel from './panels/TasksPanel'
 import MessagesPanel from './panels/MessagesPanel'
 
@@ -14,12 +14,12 @@ const DOCK_H = 96
 
 const CONFIGS = {
   profile:  { title: 'Profile',   w: 300, h: 260 },
-  stats:    { title: 'Stats',     w: 300, h: 260 },
+  projects: { title: 'Projects',  w: 400, h: 520 },
   tasks:    { title: 'Tasks',     w: 300, h: 260 },
   messages: { title: 'Messages',  w: 300, h: 270 },
 }
 
-const PANELS = { profile: ProfilePanel, stats: StatsPanel, tasks: TasksPanel, messages: MessagesPanel }
+const PANELS = { profile: ProfilePanel, projects: ProjectsPanel, tasks: TasksPanel, messages: MessagesPanel }
 
 export default function App() {
   const [win, setWin] = useState(null)
@@ -27,14 +27,17 @@ export default function App() {
   const desktopRef = useRef(null)
 
   const doOpen = useCallback(id => {
-    const { w, h } = CONFIGS[id]
+    const cfg = CONFIGS[id]
     const dw = desktopRef.current?.clientWidth  ?? 900
     const dh = desktopRef.current?.clientHeight ?? 620
+    const isMobile = dw < 640
+    const w = (id === 'projects' && isMobile) ? dw - 32 : cfg.w
+    const h = cfg.h
     setWin({
       id,
-      title: CONFIGS[id].title,
+      title: cfg.title,
       x: Math.round((dw - w) / 2),
-      y: dh - DOCK_H - h - 24,
+      y: Math.max(16, dh - DOCK_H - h - 24),
       width: w,
       height: h,
       status: 'opening',
@@ -126,7 +129,7 @@ export default function App() {
       {leaving && (() => {
         const Panel = PANELS[leaving.id]
         return (
-          <Window key={`leaving-${leaving.id}`} {...leaving} status="minimizing"
+          <Window key={leaving.id} {...leaving} status="minimizing"
             onClose={() => {}} onMinimizeEnd={handleLeavingEnd} onOpenEnd={() => {}} onMove={() => {}} onResize={() => {}}>
             <Panel />
           </Window>

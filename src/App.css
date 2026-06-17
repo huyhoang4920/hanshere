@@ -470,6 +470,226 @@
 }
 .msg-time { font-size: 10px; color: rgba(255,255,255,0.35); margin-top: 3px; padding-left: 2px; }
 
+/* ── Projects panel ─────────────────────────────────────────── */
+
+/* Escape win-body padding so scrollbar sits at window edge */
+.projects-root {
+  margin: -16px -18px;
+  width: calc(100% + 36px);
+  height: calc(100% + 32px);
+  overflow: hidden; /* contains slide animations */
+}
+
+.projects-view {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 14px 16px 16px;
+}
+
+/* Gallery grid */
+.proj-gallery {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 4px 2px 4px; /* room for card hover shadow */
+}
+
+/* Card — glass plate like the dock */
+.proj-card {
+  display: flex;
+  flex-direction: column;
+  background: rgba(10,10,20,0.28);
+  border: 0.5px solid rgba(255,255,255,0.16);
+  border-top-color: rgba(255,255,255,0.22);
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+  will-change: transform;
+  box-shadow:
+    0 0 0 0.5px rgba(255,255,255,0.05) inset,
+    0 1px 0 rgba(255,255,255,0.14) inset,
+    0 4px 14px rgba(0,0,0,0.18);
+  transition:
+    transform 0.24s cubic-bezier(0.34,1.4,0.64,1),
+    box-shadow 0.24s ease;
+}
+.proj-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow:
+    0 0 0 0.5px rgba(255,255,255,0.08) inset,
+    0 1px 0 rgba(255,255,255,0.22) inset,
+    0 0 0 1px rgba(255,255,255,0.12),
+    0 14px 36px rgba(0,0,0,0.3);
+}
+.proj-card:active {
+  transform: translateY(-1px) scale(0.99);
+}
+
+.proj-thumb {
+  margin: 8px 8px 0;
+  border-radius: 8px;
+  aspect-ratio: 16/9;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.proj-card-body {
+  padding: 8px 10px 10px;
+  position: relative;
+  z-index: 2;
+}
+.proj-card-title {
+  font-size: 11.5px;
+  font-weight: 450;
+  color: rgba(255,255,255,0.92);
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  transform-origin: top left;
+  margin-bottom: 2px;
+}
+.proj-card-meta {
+  font-size: 10px;
+  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.03em;
+}
+
+/* ── Shared-element transition (gallery ⇄ detail) ───────────── */
+
+/* The detail layer (carrying the flying hero) always sits on top during the morph */
+.projects-view--detail.is-entering,
+.projects-view--detail.is-exiting { z-index: 3; }
+.proj-gallery-layer.is-entering,
+.proj-gallery-layer.is-exiting   { z-index: 2; }
+/* Only the outgoing layer is inert; the incoming one (back button / cards) is
+   clickable immediately so transitions can be interrupted without waiting. */
+.projects-view.is-exiting        { pointer-events: none; }
+
+/* Other cards fade away / in; the clicked card is hidden — the hero carries it */
+@keyframes projCardOut {
+  to { opacity: 0; transform: translateY(6px) scale(0.97); }
+}
+@keyframes projCardIn {
+  from { opacity: 0; transform: translateY(6px) scale(0.97); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes projCardSlideIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: none; }
+}
+.proj-gallery-layer.is-exiting  .proj-card { animation: projCardOut 0.26s ease forwards; }
+/* Back: cards slide up one-by-one (staggered by --i) so they don't pop in together */
+.proj-gallery-layer.is-entering .proj-card {
+  animation: projCardSlideIn 0.3s ease both;
+  animation-delay: calc(0.1s + var(--i, 0) * 0.05s);
+}
+/* Forward: hide the whole opened card — the hero carries it away while the rest fade out */
+.proj-gallery-layer.is-exiting .proj-card.is-hero { animation: none; opacity: 0; }
+/* Back: the card shell gently fades in where it belongs (no slide, so the hero still
+   lands in the right spot); only its thumbnail IMAGE is swapped with the flying hero.
+   The thumbnail stays hidden through the flight (delay ≈ BACK_DUR), then fades in beneath
+   the landed hero — so the image is never doubled. */
+@keyframes projHeroReveal { from { opacity: 0; } to { opacity: 1; } }
+.proj-gallery-layer.is-entering .proj-card.is-hero {
+  animation: projHeroReveal 0.24s ease both;
+}
+.proj-gallery-layer.is-entering .proj-card.is-hero .proj-thumb {
+  animation: projHeroReveal 0.1s 0.3s ease both;
+}
+
+/* Detail view — slight scene darkening behind the glass */
+.projects-view--detail { background-color: rgba(10,10,20,0.2); }
+@keyframes projBgIn  { from { background-color: rgba(10,10,20,0); } }
+@keyframes projBgOut { to   { background-color: rgba(10,10,20,0); } }
+.projects-view--detail.is-entering { animation: projBgIn 0.44s ease; }
+.projects-view--detail.is-exiting  { animation: projBgOut 0.3s ease forwards; }
+
+/* Detail content (everything except the flying thumb + title) cross-fades.
+   Opens LAST (after image + title land); on close it leaves FIRST. */
+@keyframes projContentIn  { from { opacity: 0; transform: translateY(12px); } }
+@keyframes projContentOut { to   { opacity: 0; transform: translateY(8px); } }
+/* Entrance stagger: back + cover (thumb FLIPs) → title → tags → content */
+.projects-view--detail.is-entering .proj-back        { animation: projContentIn 0.32s 0.06s ease-out both; }
+.projects-view--detail.is-entering .proj-detail-title,
+.projects-view--detail.is-entering .proj-detail-role { animation: projContentIn 0.32s 0.24s ease-out both; }
+.projects-view--detail.is-entering .proj-detail-tags { animation: projContentIn 0.32s 0.40s ease-out both; }
+.projects-view--detail.is-entering .proj-detail-desc,
+.projects-view--detail.is-entering .proj-detail-placeholder { animation: projContentIn 0.32s 0.54s ease-out both; }
+/* Exit: everything clears out fast together (snappy) */
+.projects-view--detail.is-exiting .proj-back,
+.projects-view--detail.is-exiting .proj-detail-title,
+.projects-view--detail.is-exiting .proj-detail-fade { animation: projContentOut 0.14s ease-in both; }
+
+/* The flying elements ride above sibling content during the morph */
+.proj-detail-thumb,
+.proj-detail-title { position: relative; z-index: 1; will-change: transform; }
+
+.proj-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.08);
+  border: 0.5px solid rgba(255,255,255,0.15);
+  border-radius: 9999px;
+  padding: 5px 12px 5px 8px;
+  color: rgba(255,255,255,0.8);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 14px;
+  transition: background 0.15s, color 0.15s;
+  letter-spacing: 0.01em;
+}
+.proj-back:hover {
+  background: rgba(255,255,255,0.14);
+  color: rgba(255,255,255,1);
+}
+
+.proj-detail-thumb {
+  width: 100%;
+  aspect-ratio: 16/9;
+  border-radius: 12px;
+  margin-bottom: 14px;
+  flex-shrink: 0;
+}
+
+.proj-detail-title {
+  font-size: 17px;
+  font-weight: 450;
+  color: rgba(255,255,255,0.96);
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  transform-origin: top left;
+  margin-bottom: 3px;
+}
+.proj-detail-role {
+  font-size: 11px;
+  color: rgba(255,255,255,0.45);
+  letter-spacing: 0.03em;
+  margin-bottom: 12px;
+}
+
+.proj-detail-tags { margin-bottom: 12px; }
+
+.proj-detail-desc {
+  font-size: 12.5px;
+  color: rgba(255,255,255,0.72);
+  line-height: 1.65;
+  margin: 0 0 18px;
+}
+
+.proj-detail-placeholder { display: flex; flex-direction: column; gap: 8px; opacity: 0.3; }
+.proj-ph-bar {
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.4);
+}
+
 .av-initials {
   width: 46px; height: 46px;
   border-radius: 50%;
