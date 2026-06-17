@@ -127,7 +127,6 @@
 }
 /* Chromium: SVG displacement refraction */
 .glass-distort .window {
-  -webkit-backdrop-filter: url(#glass-distortion) blur(8px) saturate(120%) brightness(0.95);
   backdrop-filter: url(#glass-distortion) blur(8px) saturate(120%) brightness(0.95);
 }
 
@@ -282,7 +281,6 @@
 }
 .glass-distort .dock {
   backdrop-filter: url(#glass-distortion) blur(4px) saturate(120%) brightness(0.95);
-  -webkit-backdrop-filter: url(#glass-distortion) blur(4px) saturate(120%) brightness(0.95);
 }
 
 @keyframes pillIn {
@@ -308,8 +306,8 @@
     0 1px 0 rgba(255,255,255,0.22) inset,
     0 -1px 0 rgba(0,0,0,0.2) inset,
     0 8px 24px rgba(0,0,0,0.35);
+  -webkit-backdrop-filter: blur(32px) saturate(180%);  
   backdrop-filter: blur(32px) saturate(180%);
-  -webkit-backdrop-filter: blur(32px) saturate(180%);
   pointer-events: none;
   transition: left 0.32s cubic-bezier(0.34, 1.4, 0.64, 1);
   animation: pillIn 0.3s cubic-bezier(0.34, 1.4, 0.64, 1) forwards;
