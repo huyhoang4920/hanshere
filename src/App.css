@@ -44,9 +44,6 @@
 .bg-time { font-variant-numeric: tabular-nums; }
 
 @media (max-width: 640px) {
-  .dock-pill {
-    width: 80px;
-  }
   .bg-bar {
     flex-direction: column;
     gap: 8px;
