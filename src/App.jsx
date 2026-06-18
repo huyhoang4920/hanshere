@@ -120,12 +120,6 @@ export default function App() {
   return (
     <div ref={desktopRef} className="desktop" aria-label="Liquid glass desktop">
       <Background />
-      {!win && !leaving && (
-        <div className="hint">
-          <IconViewGrid />
-          Open a window from the dock
-        </div>
-      )}
 
       {leaving && (() => {
         const Panel = PANELS[leaving.id]
