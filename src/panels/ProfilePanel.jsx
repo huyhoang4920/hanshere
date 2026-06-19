@@ -16,11 +16,11 @@ export default function ProfilePanel() {
       <div style={{ marginBottom: 12 }}>
         {tags.map(t => <span key={t} className="glass-tag">{t}</span>)}
       </div>
-      <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.55)', lineHeight: 1.7 }}>
-        I want the things I make
-        to feel like they were made with care.
-        Always curious, always mid-learning.
-        Always be the wave in the ocean.
+      <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.55)', lineHeight: 1.7 }}>
+        I craft things with care.
+      </div>
+      <div style={{ fontSize: 14, color: 'rgba(255,255,255,0.55)', lineHeight: 1.7 }}>
+        Always striving for the feeling of "just right."
       </div>
     </>
   )

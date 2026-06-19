@@ -8,13 +8,28 @@ export default function Background() {
   const videoRef = useRef(null)
 
   useEffect(() => {
+    const video = videoRef.current
+    if (!video) return
+
+    const resume = () => video.play().catch(() => {})
+
     const handleVisibility = () => {
-      if (document.visibilityState === 'visible') {
-        videoRef.current?.play().catch(() => {})
-      }
+      if (document.visibilityState === 'visible') resume()
     }
+    const handlePageShow = () => resume()
+    const handlePause = () => {
+      if (document.visibilityState === 'visible') resume()
+    }
+
     document.addEventListener('visibilitychange', handleVisibility)
-    return () => document.removeEventListener('visibilitychange', handleVisibility)
+    window.addEventListener('pageshow', handlePageShow)
+    video.addEventListener('pause', handlePause)
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibility)
+      window.removeEventListener('pageshow', handlePageShow)
+      video.removeEventListener('pause', handlePause)
+    }
   }, [])
 
   const [time, setTime] = useState(() => {
