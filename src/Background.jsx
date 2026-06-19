@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
-
-const PHOTO = 'https://www.figma.com/api/mcp/asset/530527a6-c588-4e89-99f1-b728d76e42ea'
+import PHOTO from './assets/Background.png'
 
 function pad(n) { return String(n).padStart(2, '0') }
 
