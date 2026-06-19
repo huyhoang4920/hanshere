@@ -449,6 +449,7 @@
 .task-lbl.done { color: rgba(255,255,255,0.35); text-decoration: line-through; }
 
 .msg-row { display: flex; gap: 10px; margin-bottom: 12px; }
+.msg-row > div:last-child { flex: 1; min-width: 0; }
 .msg-av {
   width: 30px; height: 30px;
   border-radius: 50%;
@@ -472,7 +473,8 @@
   font-size: 12.5px;
   color: rgba(255,255,255,0.9);
   line-height: 1.5;
-  max-width: 88%;
+  width: fit-content;
+  max-width: 400px;
 }
 .msg-time { font-size: 10px; color: rgba(255,255,255,0.35); margin-top: 3px; padding-left: 2px; }
 

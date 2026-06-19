@@ -1,10 +1,12 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
-import { IconUser, IconBriefcase, IconCheck, IconMail, IconViewGrid } from './icons'
+import { IconUser, IconBriefcase, IconMail } from './icons'
+import { TaskList } from 'iconoir-react'
+const TaskListIcon = () => <TaskList width={20} height={20} strokeWidth={1.5} />
 import './App.css'
 import Background from './Background'
 import Window from './Window'
 
-const DOCK_ICONS = { profile: IconUser, projects: IconBriefcase, tasks: IconCheck, messages: IconMail }
+const DOCK_ICONS = { profile: IconUser, projects: IconBriefcase, tasks: TaskListIcon, messages: IconMail }
 import ProfilePanel from './panels/ProfilePanel'
 import ProjectsPanel from './panels/ProjectsPanel'
 import TasksPanel from './panels/TasksPanel'
@@ -13,7 +15,7 @@ import MessagesPanel from './panels/MessagesPanel'
 const DOCK_H = 96
 
 const CONFIGS = {
-  profile:  { title: 'Profile',   w: 350, h: 250 },
+  profile:  { title: 'Profile',   w: 350, h: 270 },
   projects: { title: 'Projects',  w: 500, h: 520 },
   tasks:    { title: 'Tasks',     w: 350, h: 250 },
   messages: { title: 'Messages',  w: 350, h: 300 },

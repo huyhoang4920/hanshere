@@ -1,7 +1,7 @@
 const MESSAGES = [
-  { av: 'LM', cls: 'av-a', text: 'Hey, can you review the MCP banner copy before we publish?', time: '10:32 AM' },
-  { av: 'PL', cls: 'av-b', text: 'Mobile sprint review moved to Thursday, FYI.', time: '11:05 AM' },
-  { av: 'TR', cls: 'av-c', text: 'Your portfolio looks great! The GemPages case study is really solid.', time: '2:18 PM' },
+  { av: 'HH', cls: 'av-a', text: 'Hello world', time: '10:32 AM' },
+  { av: 'DP', cls: 'av-b', text: 'Touch the grass! Love the vibe', time: '11:05 AM' },
+  { av: 'AM', cls: 'av-c', text: 'Your portfolio looks great! The GemPages case study is really solid.', time: '2:18 PM' },
 ]
 
 export default function MessagesPanel() {

@@ -1,13 +1,15 @@
+import avatarImg from '../assets/Avatar.jpg'
+
 export default function ProfilePanel() {
-  const tags = ['Figma', 'UX Research', 'React', 'Shopify', 'Next.js']
+  const tags = ['UX Design', 'Interaction Design', 'Design Systems','Design Engineer-wannabe']
   return (
     <>
       <div style={{ display: 'flex', gap: 14, alignItems: 'center', marginBottom: 14 }}>
-        <div className="av-initials">H</div>
+        <img src={avatarImg} alt="Hans Nguyen" className="av-initials" style={{ objectFit: 'cover', background: 'transparent' }} />
         <div>
           <div style={{ fontSize: 15, fontWeight: 600, color: '#fff' }}>Hans Nguyen</div>
           <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', marginTop: 2 }}>
-            Product Designer · Hanoi
+            Product Designer · Vietnam
           </div>
         </div>
       </div>
@@ -15,7 +17,10 @@ export default function ProfilePanel() {
         {tags.map(t => <span key={t} className="glass-tag">{t}</span>)}
       </div>
       <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.55)', lineHeight: 1.7 }}>
-        4 years building Shopify page builder products. Exploring frontend dev and open to new roles.
+        I want the things I make
+        to feel like they were made with care.
+        Always curious, always mid-learning.
+        Always be the wave in the ocean.
       </div>
     </>
   )
