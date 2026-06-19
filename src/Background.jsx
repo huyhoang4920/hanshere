@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import PHOTO from './assets/Background.png'
+
+const VIDEO_URL = 'https://pub-766cf248044a43a59c0a362a117f9274.r2.dev/C1106_stabilized.webm'
 
 function pad(n) { return String(n).padStart(2, '0') }
 
@@ -37,7 +38,16 @@ export default function Background() {
           <span className="bg-time">{time}</span>
         </div>
       </div>
-      <div className="bg-photo" style={{ backgroundImage: `url(${PHOTO})` }} />
+      <div className="bg-photo">
+        <video
+          src={VIDEO_URL}
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="bg-video"
+        />
+      </div>
     </div>
   )
 }
