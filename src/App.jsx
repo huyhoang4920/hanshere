@@ -58,19 +58,25 @@ export default function App() {
     return { ...w, genieX, genieY }
   }, [])
 
-  const playSound = useCallback(ref => {
-    const a = ref.current
-    if (!a) return
-    a.currentTime = 0
-    a.play().catch(() => {})
+  const playSound = useCallback(key => {
+    const ctx = audioCtxRef.current
+    const buf = buffersRef.current[key]
+    if (!ctx || !buf) return
+    const play = () => {
+      const src = ctx.createBufferSource()
+      src.buffer = buf
+      src.connect(ctx.destination)
+      src.start(0)
+    }
+    ctx.state === 'suspended' ? ctx.resume().then(play) : play()
   }, [])
 
   const handleDockClick = useCallback(id => {
-    if (!win) { playSound(tapAudioRef); doOpen(id); return }
+    if (!win) { playSound('tap'); doOpen(id); return }
     if (win.id === id) {
-      playSound(unselectAudioRef); setLeaving(makeLeaving(win)); setWin(null)
+      playSound('unselect'); setLeaving(makeLeaving(win)); setWin(null)
     } else {
-      playSound(tapAudioRef); setLeaving(makeLeaving(win)); doOpen(id)
+      playSound('tap'); setLeaving(makeLeaving(win)); doOpen(id)
     }
   }, [win, doOpen, makeLeaving, playSound])
 
@@ -113,34 +119,32 @@ export default function App() {
     }
   }, [activeId])
 
-  const scrollAudioRef = useRef(null)
-  const unselectAudioRef = useRef(null)
-  const tapAudioRef = useRef(null)
+  const audioCtxRef = useRef(null)
+  const buffersRef = useRef({})
 
   useEffect(() => {
-    scrollAudioRef.current = new Audio(SCROLL_SFX)
-    unselectAudioRef.current = new Audio(UNSELECT_SFX)
-    tapAudioRef.current = new Audio(TAP_SFX)
+    const AC = window.AudioContext || window.webkitAudioContext
+    if (!AC) return
+    const ctx = new AC()
+    audioCtxRef.current = ctx
 
-    const unlock = () => {
-      [scrollAudioRef.current, unselectAudioRef.current, tapAudioRef.current].forEach(a => {
-        if (!a) return
-        a.volume = 0
-        a.play().then(() => { a.pause(); a.currentTime = 0; a.volume = 1 }).catch(() => {})
-      })
-      document.removeEventListener('click', unlock)
-      document.removeEventListener('touchstart', unlock)
+    const load = async (url, key) => {
+      try {
+        const res = await fetch(url)
+        const ab = await res.arrayBuffer()
+        buffersRef.current[key] = await ctx.decodeAudioData(ab)
+      } catch {}
     }
-    document.addEventListener('click', unlock)
-    document.addEventListener('touchstart', unlock)
-    return () => {
-      document.removeEventListener('click', unlock)
-      document.removeEventListener('touchstart', unlock)
-    }
+
+    load(TAP_SFX, 'tap')
+    load(UNSELECT_SFX, 'unselect')
+    load(SCROLL_SFX, 'scroll')
+
+    return () => ctx.close()
   }, [])
 
   const handleDockButtonHover = useCallback(() => {
-    playSound(scrollAudioRef)
+    playSound('scroll')
   }, [playSound])
 
   const glowRef = useRef(null)
