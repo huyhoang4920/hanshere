@@ -102,7 +102,7 @@ export default function MessagesPanel() {
         </div>
         <div className="msg-compose-fields">
           <div className="msg-compose-input-row">
-            <div style={{ flex: 1, overflow: 'hidden', minWidth: 0 }}>
+            <div style={{ flex: 1, overflow: 'hidden', minWidth: 0, height: '47px' }}>
               <textarea
                 className="msg-compose-text"
                 placeholder="Leave a message…"
