@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node -e ' *)",
+      "Bash(python3 -c \"import json,sys; p=json.load\\(sys.stdin\\); print\\(p.get\\('version','?'\\)\\)\")",
+      "Bash(node --input-type=module)",
+      "Bash(vercel dev --listen 3001 > /tmp/vercel-dev.log 2>&1 & *)",
+      "Bash(vercel env *)",
+      "Bash(pkill -f \"vercel dev\")",
+      "Bash(python3 -c \"import sys,json; data=json.load\\(sys.stdin\\); print\\(f'Got {len\\(data\\)} projects'\\); [print\\(f\\\\\"- {p['title']} \\({p['year']}\\)\\\\\"\\) for p in data]\")",
+      "Bash(curl -s \"http://localhost:3001/api/projects/376784f2-81f9-80c8-b522-d0533bc0d488\")",
+      "Bash(python3 -c ' *)",
+      "Bash(curl -s \"http://localhost:3001/api/projects/376784f2-81f9-800f-b86b-c9e8455cd369\")",
+      "Bash(curl -s \"http://localhost:3001/api/projects\")",
+      "Bash(curl -s http://localhost:3001/api/messages)"
+    ],
+    "additionalDirectories": [
+      "/tmp"
+    ]
+  }
+}

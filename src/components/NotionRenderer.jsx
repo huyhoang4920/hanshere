@@ -67,7 +67,7 @@ export default function NotionRenderer({ blocks }) {
 
       case 'image':
         elements.push(
-          <img key={i} src={block.url} alt={block.caption || ''} />
+          <img key={i} src={block.url} alt={block.caption || ''} loading="lazy" />
         )
         break
 

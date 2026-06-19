@@ -126,6 +126,7 @@ export default async function handler(req, res) {
       fetchBlocks(id),
     ])
 
+    res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=3600')
     res.status(200).json({ ...transformPage(page), blocks })
   } catch (err) {
     console.error(err)

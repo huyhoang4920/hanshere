@@ -11,19 +11,15 @@ const EASE_BACK = 'cubic-bezier(0.32, -0.05, 0.33, 1)'
 const OPEN_TOTAL = 900
 const BACK_TOTAL = 700
 
-const PALETTE = [
-  'linear-gradient(135deg,#7c3aed 0%,#0ea5e9 100%)',
-  'linear-gradient(135deg,#ec4899 0%,#f59e0b 100%)',
-  'linear-gradient(135deg,#10b981 0%,#0ea5e9 100%)',
-  'linear-gradient(135deg,#f59e0b 0%,#ec4899 100%)',
-  'linear-gradient(135deg,#0ea5e9 0%,#10b981 100%)',
-  'linear-gradient(135deg,#7c3aed 0%,#ec4899 100%)',
-]
+const paletteBg = () => 'rgba(255,255,255,0.08)'
 
-const thumbBg = (project, index) =>
-  project.cover
-    ? `url(${project.cover}) center/cover no-repeat`
-    : PALETTE[index % PALETTE.length]
+function ThumbImg({ cover, style, className, refEl, lazy = true }) {
+  return (
+    <div className={className} style={style} ref={refEl}>
+      {cover && <img src={cover} loading={lazy ? 'lazy' : 'eager'} alt="" className="proj-thumb-img" />}
+    </div>
+  )
+}
 
 function morphThumb(el, ext, { open, duration, easing }) {
   if (!el || !ext) return
@@ -162,10 +158,11 @@ export default function ProjectsPanel() {
                     style={{ '--i': i }}
                     onClick={() => openProject(p)}
                   >
-                    <div
+                    <ThumbImg
                       className="proj-thumb"
-                      ref={el => { cardThumbRefs.current[p.id] = el }}
-                      style={{ background: thumbBg(p, i) }}
+                      refEl={el => { cardThumbRefs.current[p.id] = el }}
+                      style={{ background: paletteBg(i) }}
+                      cover={p.cover}
                     />
                     <div className="proj-card-body">
                       <div className="proj-card-title">{p.title}</div>
@@ -184,10 +181,12 @@ export default function ProjectsPanel() {
             <IconArrowLeft />
             <span>Projects</span>
           </button>
-          <div
+          <ThumbImg
             className="proj-detail-thumb"
-            ref={heroThumbRef}
-            style={{ background: thumbBg(selected, selectedIndex) }}
+            refEl={heroThumbRef}
+            style={{ background: paletteBg(selectedIndex) }}
+            cover={selected.cover}
+            lazy={false}
           />
           <div className="proj-detail-title">{selected.title}</div>
           <div className="proj-detail-fade">

@@ -25,7 +25,7 @@ export default function Background() {
     <div className="bg-wrap">
       <div className="bg-bar">
         <div className="bg-row">
-          <span>HOANG NGUYEN</span>
+          <span>HANS NGUYEN</span>
           <span className="bg-dot" />
           <span>PRODUCT DESIGNER</span>
         </div>
