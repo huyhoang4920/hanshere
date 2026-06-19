@@ -478,6 +478,30 @@
 }
 .msg-time { font-size: 10px; color: rgba(255,255,255,0.35); margin-top: 3px; padding-left: 2px; }
 
+.msg-skeleton { display: flex; gap: 10px; margin-bottom: 12px; }
+.msg-skeleton-av {
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.08);
+  flex-shrink: 0;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+.msg-skeleton-body { display: flex; flex-direction: column; gap: 6px; padding-top: 4px; }
+.msg-skeleton-bubble {
+  height: 32px;
+  border-radius: 4px 14px 14px 14px;
+  background: rgba(255,255,255,0.08);
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+.msg-skeleton-time {
+  height: 8px;
+  width: 60px;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.06);
+  animation: shimmer 1.4s ease-in-out infinite;
+  animation-delay: 0.2s;
+}
+
 /* ── Projects panel ─────────────────────────────────────────── */
 
 /* Escape win-body padding so scrollbar sits at window edge */
@@ -679,7 +703,7 @@
 .projects-view--detail.is-entering .proj-detail-title,
 .projects-view--detail.is-entering .proj-detail-role { animation: projContentIn 0.32s 0.24s ease-out both; }
 .projects-view--detail.is-entering .proj-detail-tags { animation: projContentIn 0.32s 0.40s ease-out both; }
-.projects-view--detail.is-entering .proj-detail-desc,
+.projects-view--detail.is-entering .proj-detail-fade,
 .projects-view--detail.is-entering .proj-detail-placeholder { animation: projContentIn 0.32s 0.54s ease-out both; }
 /* Exit: everything clears out fast together (snappy) */
 .projects-view--detail.is-exiting .proj-back,
@@ -734,6 +758,9 @@
   letter-spacing: -0.01em;
   transform-origin: top left;
   margin-bottom: 3px;
+  max-width: 700px;
+  width: 100%;
+  margin-inline: auto;
 }
 .proj-detail-role {
   font-size: 11px;
@@ -742,7 +769,15 @@
   margin-bottom: 12px;
 }
 
-.proj-detail-tags { margin-bottom: 12px; }
+.proj-detail-tags {
+  margin-bottom: 12px;
+  max-width: 700px;
+  width: 100%;
+  margin-inline: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
 
 .proj-detail-desc {
   font-size: 12.5px;
@@ -751,7 +786,138 @@
   margin: 0 0 18px;
 }
 
+/* ── Notion content renderer ───────────────────────────────────────── */
+.notion-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.notion-content p {
+  font-size: 13.5px;
+  color: rgba(255,255,255,0.88);
+  line-height: 1.65;
+  margin: 0 auto 10px;
+  max-width: 700px;
+  width: 100%;
+}
+.notion-content h1,
+.notion-content h2,
+.notion-content h3 {
+  color: rgba(255,255,255,0.95);
+  font-weight: 550;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  margin: 20px auto 6px;
+  max-width: 700px;
+  width: 100%;
+}
+.notion-content h1:first-child,
+.notion-content h2:first-child,
+.notion-content h3:first-child { margin-top: 0; }
+.notion-content h1 { font-size: 16px; }
+.notion-content h2 { font-size: 14.5px; }
+.notion-content h3 { font-size: 13.5px; }
+.notion-content ul {
+  margin: 0 auto 10px;
+  padding-left: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-width: 700px;
+  width: 100%;
+}
+.notion-content li {
+  font-size: 13.5px;
+  color: rgba(255,255,255,0.88);
+  line-height: 1.55;
+}
+.notion-content img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  display: block;
+  margin: 8px 0 14px;
+}
+.notion-content video,
+.notion-content iframe {
+  width: 100%;
+  border-radius: 8px;
+  display: block;
+  margin: 8px 0 14px;
+  aspect-ratio: 16/9;
+  border: none;
+}
+.notion-content .callout {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  background: rgba(255,255,255,0.07);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin: 4px auto 10px;
+  font-size: 13.5px;
+  color: rgba(255,255,255,0.72);
+  line-height: 1.55;
+  max-width: 700px;
+  width: 100%;
+}
+.notion-content .callout-icon { flex-shrink: 0; }
+.notion-content .notion-link {
+  color: rgba(255,255,255,0.9);
+  text-decoration: underline;
+  text-decoration-color: rgba(255,255,255,0.35);
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+@media (hover: hover) and (pointer: fine) {
+  .notion-content .notion-link:hover {
+    text-decoration-color: rgba(255,255,255,0.8);
+  }
+}
+
 .proj-detail-placeholder { display: flex; flex-direction: column; gap: 8px; opacity: 0.3; }
+.proj-card--skeleton {
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background: none;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+}
+.proj-sk-thumb {
+  width: 100%;
+  aspect-ratio: 4/3;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.08);
+  animation: shimmer 1.4s ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * 0.15s);
+  margin-bottom: 8px;
+}
+.proj-sk-title {
+  height: 11px;
+  width: 75%;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.08);
+  animation: shimmer 1.4s ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * 0.15s + 0.1s);
+  margin: 8px 0 6px 10px;
+}
+.proj-sk-meta {
+  height: 8px;
+  width: 30%;
+  border-radius: 4px;
+  background: rgba(255,255,255,0.05);
+  animation: shimmer 1.4s ease-in-out infinite;
+  animation-delay: calc(var(--i, 0) * 0.15s + 0.2s);
+  margin-left: 10px;
+}
+@keyframes shimmer {
+  0%, 100% { opacity: 0.5; }
+  50%       { opacity: 1; }
+}
+
 .proj-ph-bar {
   height: 8px;
   border-radius: 4px;
