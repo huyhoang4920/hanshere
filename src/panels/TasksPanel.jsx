@@ -1,11 +1,11 @@
 import { useState } from 'react'
 
 const INITIAL = [
-  { t: 'Design MCP feature banner', done: true },
-  { t: 'Review portfolio case study', done: true },
-  { t: 'Update CV for Product Designer role', done: false },
-  { t: 'Finish Next.js portfolio site', done: false },
-  { t: 'Write GemPages changelog entry', done: false },
+  { t: 'Finalize the case studies', done: true },
+  { t: 'Publish the site!', done: true },
+  { t: 'Use hosting for faster content loading', done: false },
+  { t: 'ADHD mode for website', done: false },
+  { t: 'Random fact generator', done: false },
 ]
 
 export default function TasksPanel() {
