@@ -31,13 +31,14 @@ export default function App() {
     const dw = desktopRef.current?.clientWidth  ?? 900
     const dh = desktopRef.current?.clientHeight ?? 620
     const isMobile = dw < 640
-    const w = (id === 'projects' && isMobile) ? dw - 32 : cfg.w
+    const w = (id === 'projects' && isMobile) ? dw - 40 : cfg.w
     const h = cfg.h
+    const gap = isMobile ? 16 : 24
     setWin({
       id,
       title: cfg.title,
       x: Math.round((dw - w) / 2),
-      y: Math.max(16, dh - DOCK_H - h - 24),
+      y: Math.max(16, dh - DOCK_H - h - gap),
       width: w,
       height: h,
       status: 'opening',
@@ -69,6 +70,19 @@ export default function App() {
 
   const activeId = win?.status !== 'minimizing' ? win?.id : null
 
+  // Track the button that just lost active so we can play the return slot animation
+  const [returningId, setReturningId] = useState(null)
+  const prevActiveIdRef = useRef(null)
+  useEffect(() => {
+    const prev = prevActiveIdRef.current
+    prevActiveIdRef.current = activeId
+    if (prev && prev !== activeId) {
+      setReturningId(prev)
+      const t = setTimeout(() => setReturningId(null), 400)
+      return () => clearTimeout(t)
+    }
+  }, [activeId])
+
   // Keep pill mounted during exit animation, freeze position on exit
   const [pillMounted, setPillMounted] = useState(false)
   const pillExiting = pillMounted && !activeId
@@ -89,6 +103,10 @@ export default function App() {
 
   const glowRef = useRef(null)
   const dockRef = useRef(null)
+  const dockBtnWidth = useCallback(() => {
+    const btn = dockRef.current?.querySelector('.dock-btn')
+    return btn ? btn.offsetWidth : 100
+  }, [])
 
   const handleZoneMouseMove = useCallback(e => {
     if (!window.matchMedia('(pointer: fine)').matches) return
@@ -152,12 +170,12 @@ export default function App() {
               {pillMounted && (
                 <div
                   className={`dock-pill${pillExiting ? ' dock-pill--exit' : ''}`}
-                  style={{ left: 6 + lastPillIndexRef.current * 100 + 'px' }}
+                  style={{ left: 6 + lastPillIndexRef.current * dockBtnWidth() + 'px' }}
                 />
               )}
               {items.map(([id, cfg], i) => (
                 <button key={id}
-                  className={`dock-btn${activeId === id ? ' dock-btn--active' : ''}`}
+                  className={`dock-btn${activeId === id ? ' dock-btn--active' : ''}${returningId === id ? ' dock-btn--returning' : ''}`}
                   onClick={() => handleDockClick(id)}
 >
                   <div className="dock-btn-scroll">
