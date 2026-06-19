@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 
-const VIDEO_URL = 'https://pub-766cf248044a43a59c0a362a117f9274.r2.dev/C1106_stabilized_1.mp4'
+const VIDEO_URL = 'https://pub-766cf248044a43a59c0a362a117f9274.r2.dev/C1106_stabilized_3.mp4'
 
 function pad(n) { return String(n).padStart(2, '0') }
 

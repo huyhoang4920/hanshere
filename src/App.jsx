@@ -3,6 +3,9 @@ import { IconUser, IconBriefcase, IconMail } from './icons'
 import { TaskList } from 'iconoir-react'
 const TaskListIcon = () => <TaskList width={20} height={20} strokeWidth={1.5} />
 import './App.css'
+import SCROLL_SFX from './assets/Scroll SFX.mp3'
+import UNSELECT_SFX from './assets/Unselect SFX.mp3'
+import TAP_SFX from './assets/Tap SFX.mp3'
 import Background from './Background'
 import Window from './Window'
 
@@ -55,14 +58,21 @@ export default function App() {
     return { ...w, genieX, genieY }
   }, [])
 
+  const playTap = useCallback(() => {
+    const a = tapAudioRef.current
+    if (!a) return
+    a.currentTime = 0
+    a.play().catch(() => {})
+  }, [])
+
   const handleDockClick = useCallback(id => {
-    if (!win) { doOpen(id); return }
+    if (!win) { playTap(); doOpen(id); return }
     if (win.id === id) {
       setLeaving(makeLeaving(win)); setWin(null)
     } else {
-      setLeaving(makeLeaving(win)); doOpen(id)
+      isSwitchingRef.current = true; playTap(); setLeaving(makeLeaving(win)); doOpen(id)
     }
-  }, [win, doOpen, makeLeaving])
+  }, [win, doOpen, makeLeaving, playTap])
 
   const handleLeavingEnd = useCallback(() => setLeaving(null), [])
   const handleOpenEnd    = useCallback(() => setWin(prev => prev ? { ...prev, status: 'open' } : prev), [])
@@ -102,6 +112,49 @@ export default function App() {
       return () => clearTimeout(t)
     }
   }, [activeId])
+
+  const scrollAudioRef = useRef(null)
+  const unselectAudioRef = useRef(null)
+  const tapAudioRef = useRef(null)
+  const isSwitchingRef = useRef(false)
+
+  useEffect(() => {
+    scrollAudioRef.current = new Audio(SCROLL_SFX)
+    unselectAudioRef.current = new Audio(UNSELECT_SFX)
+    tapAudioRef.current = new Audio(TAP_SFX)
+
+    const unlock = () => {
+      [scrollAudioRef.current, unselectAudioRef.current, tapAudioRef.current].forEach(a => {
+        if (!a) return
+        a.volume = 0
+        a.play().then(() => { a.pause(); a.currentTime = 0; a.volume = 1 }).catch(() => {})
+      })
+      document.removeEventListener('click', unlock)
+      document.removeEventListener('touchstart', unlock)
+    }
+    document.addEventListener('click', unlock)
+    document.addEventListener('touchstart', unlock)
+    return () => {
+      document.removeEventListener('click', unlock)
+      document.removeEventListener('touchstart', unlock)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!returningId) return
+    if (isSwitchingRef.current) { isSwitchingRef.current = false; return }
+    const a = unselectAudioRef.current
+    if (!a) return
+    a.currentTime = 0
+    a.play().catch(() => {})
+  }, [returningId])
+
+  const handleDockButtonHover = useCallback(() => {
+    const a = scrollAudioRef.current
+    if (!a) return
+    a.currentTime = 0
+    a.play().catch(() => {})
+  }, [])
 
   const glowRef = useRef(null)
   const dockRef = useRef(null)
@@ -181,6 +234,7 @@ export default function App() {
                 <button key={id}
                   className={`dock-btn${activeId === id ? ' dock-btn--active' : ''}${returningId === id ? ' dock-btn--returning' : ''}`}
                   onClick={() => handleDockClick(id)}
+                  onMouseEnter={handleDockButtonHover}
 >
                   <div className="dock-btn-scroll">
                     <span className="dock-btn-icon">{(() => { const Icon = DOCK_ICONS[id]; return <Icon /> })()}</span>
