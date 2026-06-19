@@ -530,16 +530,22 @@
     transform 0.24s cubic-bezier(0.34,1.4,0.64,1),
     box-shadow 0.24s ease;
 }
-.proj-card:hover {
-  transform: translateY(-5px) scale(1.02);
-  box-shadow:
-    0 0 0 0.5px rgba(255,255,255,0.08) inset,
-    0 1px 0 rgba(255,255,255,0.22) inset,
-    0 0 0 1px rgba(255,255,255,0.12),
-    0 14px 36px rgba(0,0,0,0.3);
+@media (hover: hover) and (pointer: fine) {
+  .proj-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow:
+      0 0 0 0.5px rgba(255,255,255,0.08) inset,
+      0 1px 0 rgba(255,255,255,0.22) inset,
+      0 0 0 1px rgba(255,255,255,0.12),
+      0 14px 36px rgba(0,0,0,0.3);
+  }
 }
 .proj-card:active {
-  transform: translateY(-1px) scale(0.99);
+  transform: scale(0.96);
+  box-shadow:
+    0 0 0 0.5px rgba(255,255,255,0.04) inset,
+    0 1px 0 rgba(255,255,255,0.1) inset,
+    0 2px 8px rgba(0,0,0,0.2);
 }
 
 .proj-thumb {
