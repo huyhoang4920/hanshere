@@ -2,9 +2,10 @@
 
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+button, input, textarea, select { font-family: inherit; }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Instrument Sans', sans-serif;
+  font-family: 'Instrument Sans', sans-serif;
   background: #0a0a14;
   overflow: hidden;
 }
