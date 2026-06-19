@@ -18,7 +18,7 @@ const CONFIGS = {
   profile:  { title: 'Profile',   w: 350, h: 270 },
   projects: { title: 'Projects',  w: 500, h: 520 },
   tasks:    { title: 'Tasks',     w: 350, h: 250 },
-  messages: { title: 'Messages',  w: 350, h: 300 },
+  messages: { title: 'Messages',  w: 350, h: 400 },
 }
 
 const PANELS = { profile: ProfilePanel, projects: ProjectsPanel, tasks: TasksPanel, messages: MessagesPanel }
@@ -145,7 +145,8 @@ export default function App() {
         const Panel = PANELS[leaving.id]
         return (
           <Window key={leaving.id} {...leaving} status="minimizing"
-            onClose={() => {}} onMinimizeEnd={handleLeavingEnd} onOpenEnd={() => {}} onMove={() => {}} onResize={() => {}}>
+            onClose={() => {}} onMinimizeEnd={handleLeavingEnd} onOpenEnd={() => {}} onMove={() => {}} onResize={() => {}}
+            bodyClass={leaving.id === 'messages' ? 'win-body--messages' : undefined}>
             <Panel />
           </Window>
         )
@@ -155,7 +156,8 @@ export default function App() {
         const Panel = PANELS[win.id]
         return (
           <Window key={win.id} {...win} openDelayed={!!leaving}
-            onClose={handleClose} onMinimizeEnd={() => {}} onOpenEnd={handleOpenEnd} onMove={handleMove} onResize={handleResize}>
+            onClose={handleClose} onMinimizeEnd={() => {}} onOpenEnd={handleOpenEnd} onMove={handleMove} onResize={handleResize}
+            bodyClass={win.id === 'messages' ? 'win-body--messages' : undefined}>
             <Panel />
           </Window>
         )

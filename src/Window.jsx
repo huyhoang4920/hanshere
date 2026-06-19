@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { IconArrowDownRight } from './icons'
 
-export default function Window({ id, title, x, y, width, height, status, genieX, genieY, openDelayed, onClose, onMinimizeEnd, onOpenEnd, onMove, onResize, children }) {
+export default function Window({ id, title, x, y, width, height, status, genieX, genieY, openDelayed, onClose, onMinimizeEnd, onOpenEnd, onMove, onResize, bodyClass, children }) {
   const winRef = useRef(null)
   const dragState = useRef(null)
   const resizeState = useRef(null)
@@ -97,7 +97,7 @@ export default function Window({ id, title, x, y, width, height, status, genieX,
         </div>
         <div className="win-title">{title}</div>
       </div>
-      <div className="win-body">{children}</div>
+      <div className={`win-body${bodyClass ? ` ${bodyClass}` : ''}`}>{children}</div>
       <div className="resize-handle" onMouseDown={onResizeMouseDown}>
         <IconArrowDownRight />
       </div>

@@ -1,11 +1,12 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
 export function useMessages() {
   const [messages, setMessages] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  useEffect(() => {
+  const fetchMessages = useCallback(() => {
+    setLoading(true)
     fetch('/api/messages')
       .then(r => { if (!r.ok) throw new Error('Failed to fetch messages'); return r.json() })
       .then(data => setMessages(data))
@@ -13,5 +14,7 @@ export function useMessages() {
       .finally(() => setLoading(false))
   }, [])
 
-  return { messages, loading, error }
+  useEffect(() => { fetchMessages() }, [fetchMessages])
+
+  return { messages, loading, error, refetch: fetchMessages }
 }

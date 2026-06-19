@@ -12,7 +12,9 @@
       "Bash(python3 -c ' *)",
       "Bash(curl -s \"http://localhost:3001/api/projects/376784f2-81f9-800f-b86b-c9e8455cd369\")",
       "Bash(curl -s \"http://localhost:3001/api/projects\")",
-      "Bash(curl -s http://localhost:3001/api/messages)"
+      "Bash(curl -s http://localhost:3001/api/messages)",
+      "Bash(curl -s -X POST http://localhost:3001/api/messages -H 'Content-Type: application/json' -d '{\"name\":\"TT\",\"text\":\"Test message from compose\"}')",
+      "Bash(curl -s -X POST http://localhost:3001/api/messages -H 'Content-Type: application/json' -d '{\"name\":\"TT\",\"text\":\"Test from compose form\"}')"
     ],
     "additionalDirectories": [
       "/tmp"

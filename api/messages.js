@@ -18,7 +18,28 @@ function initials(name) {
   return name.slice(0, 2).toUpperCase()
 }
 
+async function postMessage(req, res) {
+  const { name, text } = req.body ?? {}
+  if (!name?.trim() || !text?.trim()) {
+    return res.status(400).json({ error: 'Name and text are required' })
+  }
+  try {
+    await notion.pages.create({
+      parent: { type: 'data_source_id', data_source_id: DATABASE_ID },
+      properties: {
+        Name: { title: [{ text: { content: name.slice(0, 2).toUpperCase() } }] },
+        Text: { rich_text: [{ text: { content: text.slice(0, 200) } }] },
+      },
+    })
+    res.status(201).json({ ok: true })
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ error: 'Failed to save message' })
+  }
+}
+
 export default async function handler(req, res) {
+  if (req.method === 'POST') return postMessage(req, res)
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' })
   }
