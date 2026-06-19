@@ -37,9 +37,7 @@ export default function Background() {
           <span className="bg-time">{time}</span>
         </div>
       </div>
-      <div className="bg-photo">
-        <img src={PHOTO} alt="Background" />
-      </div>
+      <div className="bg-photo" style={{ backgroundImage: `url(${PHOTO})` }} />
     </div>
   )
 }
