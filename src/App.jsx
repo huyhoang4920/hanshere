@@ -58,21 +58,21 @@ export default function App() {
     return { ...w, genieX, genieY }
   }, [])
 
-  const playTap = useCallback(() => {
-    const a = tapAudioRef.current
+  const playSound = useCallback(ref => {
+    const a = ref.current
     if (!a) return
     a.currentTime = 0
     a.play().catch(() => {})
   }, [])
 
   const handleDockClick = useCallback(id => {
-    if (!win) { playTap(); doOpen(id); return }
+    if (!win) { playSound(tapAudioRef); doOpen(id); return }
     if (win.id === id) {
-      setLeaving(makeLeaving(win)); setWin(null)
+      playSound(unselectAudioRef); setLeaving(makeLeaving(win)); setWin(null)
     } else {
-      isSwitchingRef.current = true; playTap(); setLeaving(makeLeaving(win)); doOpen(id)
+      playSound(tapAudioRef); setLeaving(makeLeaving(win)); doOpen(id)
     }
-  }, [win, doOpen, makeLeaving, playTap])
+  }, [win, doOpen, makeLeaving, playSound])
 
   const handleLeavingEnd = useCallback(() => setLeaving(null), [])
   const handleOpenEnd    = useCallback(() => setWin(prev => prev ? { ...prev, status: 'open' } : prev), [])
@@ -116,7 +116,6 @@ export default function App() {
   const scrollAudioRef = useRef(null)
   const unselectAudioRef = useRef(null)
   const tapAudioRef = useRef(null)
-  const isSwitchingRef = useRef(false)
 
   useEffect(() => {
     scrollAudioRef.current = new Audio(SCROLL_SFX)
@@ -140,21 +139,9 @@ export default function App() {
     }
   }, [])
 
-  useEffect(() => {
-    if (!returningId) return
-    if (isSwitchingRef.current) { isSwitchingRef.current = false; return }
-    const a = unselectAudioRef.current
-    if (!a) return
-    a.currentTime = 0
-    a.play().catch(() => {})
-  }, [returningId])
-
   const handleDockButtonHover = useCallback(() => {
-    const a = scrollAudioRef.current
-    if (!a) return
-    a.currentTime = 0
-    a.play().catch(() => {})
-  }, [])
+    playSound(scrollAudioRef)
+  }, [playSound])
 
   const glowRef = useRef(null)
   const dockRef = useRef(null)
