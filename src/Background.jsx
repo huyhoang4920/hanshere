@@ -1,10 +1,22 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 const VIDEO_URL = 'https://pub-766cf248044a43a59c0a362a117f9274.r2.dev/C1106_stabilized_1.mp4'
 
 function pad(n) { return String(n).padStart(2, '0') }
 
 export default function Background() {
+  const videoRef = useRef(null)
+
+  useEffect(() => {
+    const handleVisibility = () => {
+      if (document.visibilityState === 'visible') {
+        videoRef.current?.play().catch(() => {})
+      }
+    }
+    document.addEventListener('visibilitychange', handleVisibility)
+    return () => document.removeEventListener('visibilitychange', handleVisibility)
+  }, [])
+
   const [time, setTime] = useState(() => {
     const now = new Date()
     return `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`
@@ -46,6 +58,7 @@ export default function Background() {
           loop
           playsInline
           className="bg-video"
+          ref={videoRef}
         />
       </div>
     </div>
