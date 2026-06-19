@@ -315,7 +315,7 @@
     0 1px 0 rgba(255,255,255,0.22) inset,
     0 -1px 0 rgba(0,0,0,0.2) inset,
     0 8px 24px rgba(0,0,0,0.35);
-  -webkit-backdrop-filter: blur(32px) saturate(180%);  
+  -webkit-backdrop-filter: blur(32px) saturate(180%);
   backdrop-filter: blur(32px) saturate(180%);
   pointer-events: none;
   transition: left 0.32s cubic-bezier(0.34, 1.4, 0.64, 1);
@@ -1061,7 +1061,7 @@
 @media (max-width: 640px) {
   /* Dock buttons: slightly smaller */
   .dock-btn { width: 90px; }
-  .dock-pill { width: 90px; }
+  .dock-pill { width: 90px; -webkit-backdrop-filter: none; backdrop-filter: none; background: rgba(255,255,255,0.12); }
 
   /* Hide resize handle — no mouse drag on touch */
   .resize-handle { display: none; }

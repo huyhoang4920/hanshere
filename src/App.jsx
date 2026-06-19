@@ -144,6 +144,7 @@ export default function App() {
   }, [])
 
   const handleDockButtonHover = useCallback(() => {
+    if (!window.matchMedia('(pointer: fine)').matches) return
     playSound('scroll')
   }, [playSound])
 
