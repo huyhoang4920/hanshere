@@ -1,7 +1,8 @@
-// Detect Chromium (supports SVG displacement in backdrop-filter); Safari/WebKit does not
-if (!/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
-  document.documentElement.classList.add('glass-distort')
-}
+const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent)
+// Chromium supports SVG displacement in backdrop-filter; Safari does not
+if (!isSafari) document.documentElement.classList.add('glass-distort')
+// Safari flashes when background-color animates inside a backdrop-filter parent
+if (isSafari) document.documentElement.classList.add('is-safari')
 
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'

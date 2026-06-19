@@ -210,6 +210,13 @@
   font-size: 13px;
   line-height: 1.6;
   border-radius: 0 0 20px 20px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.25) transparent;
+}
+.win-body::-webkit-scrollbar { width: 2px; }
+.win-body::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.25);
+  border-radius: 2px;
 }
 
 /* Window open / genie-minimize animations */
@@ -478,6 +485,9 @@
   width: calc(100% + 36px);
   height: calc(100% + 32px);
   overflow: hidden; /* contains slide animations */
+  isolation: isolate; /* own stacking context — prevents Safari backdrop-filter repaint flash */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
 }
 
 .projects-view {
@@ -498,7 +508,11 @@
 
 /* Card — glass plate like the dock */
 .proj-card {
+  -webkit-appearance: none;
+  appearance: none;
+  display: -webkit-flex;
   display: flex;
+  -webkit-flex-direction: column;
   flex-direction: column;
   background: rgba(10,10,20,0.28);
   border: 0.5px solid rgba(255,255,255,0.16);
@@ -508,7 +522,6 @@
   cursor: pointer;
   text-align: left;
   color: inherit;
-  will-change: transform;
   box-shadow:
     0 0 0 0.5px rgba(255,255,255,0.05) inset,
     0 1px 0 rgba(255,255,255,0.14) inset,
@@ -531,11 +544,10 @@
 
 .proj-thumb {
   margin: 8px 8px 0;
+  width: calc(100% - 16px);
   border-radius: 8px;
   aspect-ratio: 16/9;
   flex-shrink: 0;
-  position: relative;
-  z-index: 0;
   overflow: hidden;
 }
 /* iOS < 15 doesn't support aspect-ratio — use padding-top trick as fallback */
@@ -574,13 +586,36 @@
 .projects-view--detail.is-exiting { z-index: 3; }
 .proj-gallery-layer.is-entering,
 .proj-gallery-layer.is-exiting   { z-index: 2; }
+/* Pre-promote animating layers to GPU so Safari doesn't repaint the window's
+   backdrop-filter on every frame, which causes a brightness flash */
+.projects-view.is-entering,
+.projects-view.is-exiting {
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  will-change: opacity, background-color;
+}
 /* Only the outgoing layer is inert; the incoming one (back button / cards) is
    clickable immediately so transitions can be interrupted without waiting. */
 .projects-view.is-exiting        { pointer-events: none; }
+/* Scrollbar — visible when settled, fades out during animation.
+   Track space is always reserved so there is no layout shift. */
+.projects-view::-webkit-scrollbar { width: 2px; }
+.projects-view::-webkit-scrollbar-thumb   {
+  background: rgba(255,255,255,0.25);
+  border-radius: 2px;
+  transition: background 0.3s ease;
+}
+.projects-view.is-entering::-webkit-scrollbar-thumb,
+.projects-view.is-exiting::-webkit-scrollbar-thumb  { background: transparent; }
+/* Firefox */
+.projects-view                   { scrollbar-color: rgba(255,255,255,0.25) transparent; scrollbar-width: thin; }
+.projects-view.is-entering,
+.projects-view.is-exiting        { scrollbar-color: transparent transparent; }
 
 /* Other cards fade away / in; the clicked card is hidden — the hero carries it */
 @keyframes projCardOut {
-  to { opacity: 0; transform: translateY(6px) scale(0.97); }
+  from { opacity: 1; transform: none; }
+  to   { opacity: 0; transform: translateY(6px) scale(0.97); }
 }
 @keyframes projCardIn {
   from { opacity: 0; transform: translateY(6px) scale(0.97); }
@@ -612,10 +647,21 @@
 
 /* Detail view — slight scene darkening behind the glass */
 .projects-view--detail { background-color: rgba(10,10,20,0.2); }
-@keyframes projBgIn  { from { background-color: rgba(10,10,20,0); } }
-@keyframes projBgOut { to   { background-color: rgba(10,10,20,0); } }
-.projects-view--detail.is-entering { animation: projBgIn 0.44s ease; }
+@keyframes projBgIn  {
+  from { background-color: rgba(10,10,20,0); }
+  to   { background-color: rgba(10,10,20,0.2); }
+}
+@keyframes projBgOut {
+  from { background-color: rgba(10,10,20,0.2); }
+  to   { background-color: rgba(10,10,20,0); }
+}
+.projects-view--detail.is-entering { animation: projBgIn 0.44s ease both; }
 .projects-view--detail.is-exiting  { animation: projBgOut 0.3s ease forwards; }
+/* Safari: skip background-color animation — it triggers a backdrop-filter repaint
+   on the parent window and causes a brightness flash on every transition */
+.is-safari .projects-view--detail                    { background-color: transparent; }
+.is-safari .projects-view--detail.is-entering,
+.is-safari .projects-view--detail.is-exiting         { animation: none; }
 
 /* Detail content (everything except the flying thumb + title) cross-fades.
    Opens LAST (after image + title land); on close it leaves FIRST. */
