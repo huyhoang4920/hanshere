@@ -102,15 +102,17 @@ export default function MessagesPanel() {
         </div>
         <div className="msg-compose-fields">
           <div className="msg-compose-input-row">
-            <textarea
-              className="msg-compose-text"
-              placeholder="Leave a message…"
-              maxLength={200}
-              rows={2}
-              value={text}
-              onChange={e => setText(e.target.value)}
-              onKeyDown={handleKeyDown}
-            />
+            <div style={{ flex: 1, overflow: 'hidden', minWidth: 0 }}>
+              <textarea
+                className="msg-compose-text"
+                placeholder="Leave a message…"
+                maxLength={200}
+                rows={2}
+                value={text}
+                onChange={e => setText(e.target.value)}
+                onKeyDown={handleKeyDown}
+              />
+            </div>
             <button
               className="msg-compose-send"
               onClick={handleSend}
