@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 
 const VIDEO_URL = 'https://pub-766cf248044a43a59c0a362a117f9274.r2.dev/C1106_stabilized_3.mp4'
+const POSTER_URL = 'https://pub-766cf248044a43a59c0a362a117f9274.r2.dev/BG_static.jpg'
 
 function pad(n) { return String(n).padStart(2, '0') }
 
@@ -68,6 +69,7 @@ export default function Background() {
       <div className="bg-photo">
         <video
           src={VIDEO_URL}
+          poster={POSTER_URL}
           autoPlay
           muted
           loop
