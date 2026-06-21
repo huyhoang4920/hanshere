@@ -49,7 +49,7 @@ export default async function handler(req, res) {
       cursor = response.has_more ? response.next_cursor : undefined
     } while (cursor)
 
-    res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=3600')
+    res.setHeader('Cache-Control', 'no-store')
     res.status(200).json(projects)
   } catch (err) {
     console.error(err)

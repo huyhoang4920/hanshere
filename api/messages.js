@@ -63,7 +63,7 @@ export default async function handler(req, res) {
       }
     })
 
-    res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=3600')
+    res.setHeader('Cache-Control', 'no-store')
     res.status(200).json(messages)
   } catch (err) {
     console.error(err)
