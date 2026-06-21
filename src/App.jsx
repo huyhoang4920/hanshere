@@ -20,7 +20,7 @@ const DOCK_H = 96
 const CONFIGS = {
   profile:  { title: 'Profile',   w: 350, h: 325 },
   projects: { title: 'Projects',  w: 500, h: 520 },
-  tasks:    { title: 'Tasks',     w: 350, h: 250 },
+  tasks:    { title: 'Tasks',     w: 350, h: 255 },
   messages: { title: 'Messages',  w: 350, h: 400 },
 }
 
