@@ -18,10 +18,10 @@ import MessagesPanel from './panels/MessagesPanel'
 const DOCK_H = 96
 
 const CONFIGS = {
-  profile:  { title: 'Profile',   w: 350, h: 325 },
+  profile:  { title: 'Profile',   w: 355, h: 325 },
   projects: { title: 'Projects',  w: 500, h: 520 },
-  tasks:    { title: 'Tasks',     w: 350, h: 255 },
-  messages: { title: 'Messages',  w: 350, h: 400 },
+  tasks:    { title: 'Tasks',     w: 340, h: 255 },
+  messages: { title: 'Messages',  w: 355, h: 400 },
 }
 
 const PANELS = { profile: ProfilePanel, projects: ProjectsPanel, tasks: TasksPanel, messages: MessagesPanel }
